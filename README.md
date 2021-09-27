@@ -17,7 +17,7 @@
   - K8S MSA
   - docker cluster MSA
 
-`OL http request → geoserver cloud → Cockroach DB`
+`Openlayers WMS http request → geoserver cloud → Cockroach DB`
 
 All nodes can utilize replication.
 
@@ -29,11 +29,11 @@ All nodes can utilize replication.
 Use Spring cloud Gateway by WMS BBOX routing and Shareded PG.
 
 ```
-OL http request → scg (WMS BBOX based request shard)
-                     ↪ geoserver cloud
-                        ├── geoserver-0 → postgis-0
-                       ...
-                        └── geoserver-n → postgis-n
+Openlayers WMS http request → scg (WMS BBOX based request shard)
+                               ↪ geoserver cloud
+                                   ├── geoserver-0 → postgis-0
+                                  ...
+                                   └── geoserver-n → postgis-n
 ```
 
 scg nodes can utilize replication.
