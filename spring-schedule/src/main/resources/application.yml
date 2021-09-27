@@ -1,0 +1,95 @@
+server:
+    port: 8001
+    context-path: /
+
+project:
+    name: spring-schedule
+    security:
+        static-resource-urls: >
+            /css/**,
+            /img/**,
+            /js/**,
+            /fonts/**,
+            /favicon.ico,
+            ${springfox.documentation.swagger.v2.path},
+            /swagger-resources/**,
+            /swagger-ui.html**,
+            /webjars/**
+        login-processing-url: /login
+        username-parameter: id
+        password-parameter: pw
+        logout-url: /logout
+        permit-all-urls: >
+            /,
+            /api/user/**,
+            /api/rtu/service
+        session:
+            maximum-per-user: 1
+            timeout: 3600
+            exception-if-maximum-exceeded: false
+        hide-user-not-found-exceptions: false
+
+# File upload & download
+file:
+    chunk-size: 100
+    download-path: /home/paranlee/download/
+
+report:
+    template: /home/paranlee/template.xlsx
+
+tus:
+    server:
+        data:
+            directory: /home/paranlee/upload
+    client:
+        api:
+            path: /api/file/upload
+
+# logging
+logging:
+    file:
+        path: /home/paranlee/log
+        max-history: 3
+        max-size: 10MB
+    level:
+        root: info
+        com:
+            example:
+                report: debug
+
+spring:
+    profiles:
+        active:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/paranlee
+        username: paranlee
+        password: bluetooth
+    resources:
+        cache:
+            cachecontrol:
+                no-cache: true
+    messages:
+        basename: messages/messages
+        use-code-as-default-message: true
+        fallback-to-system-locale: false
+    servlet:
+        multipart:
+            enabled: true
+            file-size-threshold: 2KB
+            max-file-size: 200MB
+            max-request-size: 215MB
+
+mybatis:
+    mapper-locations: mapper/*Mapper.xml
+    configuration:
+        default-statement-timeout: 300
+        map-underscore-to-camel-case: true
+    configuration-properties:
+        schema-name:
+    type-aliases-package: com.example.report.model
+
+springfox:
+    documentation:
+        swagger:
+            v2:
+                path: /api/docs

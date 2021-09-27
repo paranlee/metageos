@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.report.mapper.ReportMapper">
+
+    <select id="get0VoiceTable" parameterType="JobDto" resultType="java.util.LinkedHashMap">
+    SELECT * 
+    FROM (
+        VALUES 
+            (1, 'one', CURRENT_TIME),
+            (2, 'two', CURRENT_TIME),
+            (3, 'three', CURRENT_TIME)
+    ) AS t (seq, address, dtime);
+    </select>
+
+</mapper>
