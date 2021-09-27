@@ -1,8 +1,12 @@
 version: '3.8'
 
 volumes:
-  pg:
-    external: true
+  postgresql_config_data: # volume for postgresql data, used to store the geoserver config through jdbcconfig
+  rabbitmq_data: # volume for rabbitmq data, so it doesn't create an anonymous one on each container
+  
+networks:
+  gs-cloud-network:
+  #  driver: bridge
 
 services:
   spring-schedule:
@@ -210,18 +214,18 @@ services:
           cpus: '2.0'
           memory: 1G
 
-#  # WPS microservice, port dynamically allocated to allow scaling (e.g docker-compose scale wps=5)
-#  wps:
-#    image: geoservercloud/geoserver-cloud-wps:${TAG}
-#    depends_on:
-#      - rabbitmq
-#      - catalog
-#    environment:
-#      EUREKA_SERVER_URL: ${EUREKA_SERVER_URL}
-#      JAVA_OPTS: ${WPS_JAVA_OPTS}
-#      RABBITMQ_HOST: rabbitmq
-#    networks:
-#      - gs-cloud-network
+  #  # WPS microservice, port dynamically allocated to allow scaling (e.g docker-compose scale wps=5)
+  #  wps:
+  #    image: geoservercloud/geoserver-cloud-wps:${TAG}
+  #    depends_on:
+  #      - rabbitmq
+  #      - catalog
+  #    environment:
+  #      EUREKA_SERVER_URL: ${EUREKA_SERVER_URL}
+  #      JAVA_OPTS: ${WPS_JAVA_OPTS}
+  #      RABBITMQ_HOST: rabbitmq
+  #    networks:
+  #      - gs-cloud-network
 
   # REST config microservice, port dynamically allocated to allow scaling (e.g docker-compose scale rest=5)
   rest:
