@@ -3,13 +3,12 @@
 <img align="left" src='README/postgis-logo-1.png' width=100>
 
  We must utilize Edit `SQL View` at geoserver to handle flexible needs in PostGIS support.
-
  So, we consider ANSI SQL and PostGIS compatibility. especially, SQL **join** and table **partitioning** syntax for agility.
 
 <br>
 
 <p align="center">
-  <img src='README/geoserver-sql-view.png' width=300>
+  <img src='README/geoserver-sql-view.png' width=600>
 </p>
 
 ## 1. Cockroach DB based auto scaling, auto sharding, auto rebalancing
