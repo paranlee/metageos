@@ -8,12 +8,12 @@ POSTGRES_USER=paranlee
 export PGUSER="$POSTGRES_USER"
 
 # Create the 'template_postgis' template db
-psql -U postgis <<- EOSQL
-CREATE DATABASE parandb WITH owner='paranlee' ENCODING='utf8' LC_COLLATE='ko_KR.utf8' LC_CTYPE='ko_KR.utf8' template=template_postgis;
+psql <<- EOSQL
+CREATE DATABASE postgis_test WITH owner='paranlee' ENCODING='utf8' LC_COLLATE='ko_KR.utf8' LC_CTYPE='ko_KR.utf8' template=template0;
 EOSQL
 
-# Load EXTENSION to template_postgis, $POSTGRES_DB
-for DB in template_postgis "$POSTGRES_DB"; do
+# Load EXTENSION to $POSTGRES_DB and others
+for DB in postgis; do
 
 psql --dbname="$DB" <<- EOSQL
     CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
