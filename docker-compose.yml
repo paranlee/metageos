@@ -6,11 +6,11 @@ version: "3.8"
 volumes:
   postgresql_config_data: # volume for postgresql data, used to store the geoserver config through jdbcconfig
   rabbitmq_data: # volume for rabbitmq data, so it doesn't create an anonymous one on each container
-  
+
 networks:
   gs-cloud-network:
     driver: bridge
-        
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -279,8 +279,8 @@ services:
       dockerfile: ./Dockerfile
     image: spring-schedule:latest
     container_name: spring-schedule
-    volumes:
-      - ./data:/home/paranlee/download
+    # volumes:
+    #   - ./data:/home/paranlee/download
     ports:
       - 9000:9000
     restart: always
@@ -305,7 +305,7 @@ services:
       - gs-cloud-network
     restart: always
     healthcheck:
-      test: curl --fail -s http://localhost:8000/ || exit 1
+      test: curl --fail -s http://localhost:9010/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
