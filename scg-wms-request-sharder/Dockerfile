@@ -5,7 +5,7 @@ FROM openjdk:8-jdk-alpine
 VOLUME /tmp
 
 # Make port 8081 available to the world outside this container
-EXPOSE 8081
+EXPOSE 9010
 
 # The application's jar file
 ARG JAR_FILE=target/spring-cloud-gateway-wms-bbox-0.0.1-SNAPSHOT.jar
