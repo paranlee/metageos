@@ -29,7 +29,8 @@ Then, we can execute containerized services.
 ```bash
  ~/metageos$ docker-compose ps
          Name                        Command                   State                                                                          Ports
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------crdb-0                    /cockroach/cockroach.sh st ...   Up               26257/tcp, 8080/tcp
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+crdb-0                    /cockroach/cockroach.sh st ...   Up               26257/tcp, 8080/tcp
 crdb-1                    /cockroach/cockroach.sh st ...   Up               26257/tcp, 8080/tcp
 crdb-2                    /cockroach/cockroach.sh st ...   Up               26257/tcp, 8080/tcp
 crdb-init                 java org.springframework.b ...   Exit 0
