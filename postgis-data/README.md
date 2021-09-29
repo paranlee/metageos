@@ -16,14 +16,17 @@ Setup import options.
     <img src="README/gui-options.png" width=400>
 </p>
 
-
 Then `COPY` to db. 
 
-
 <p align="center">
-    <img src="README/gui.png" width=800>
+    <img src="README/gui.png" width=700>
 </p>
 
+Spatial index will created on both PostGIS and Cockroach DB.
+
+<p align="center">
+    <img src="README/crdb-import.png" width=700>
+</p>
 
 ```sql
  SELECT * FROM gyeonggi-AL_41_D010_20210904
