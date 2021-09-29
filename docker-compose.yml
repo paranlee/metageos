@@ -290,26 +290,6 @@ services:
       timeout: 10s
       retries: 3
 
-# request shader
-  scg-wms-request-sharder:
-    build: 
-      context: ./scg-wms-request-sharder
-      dockerfile: ./Dockerfile
-    image: scg-wms-request-sharder:latest
-    container_name: scg-wms-request-sharder
-    ports:
-      - 9010:9010
-    depends_on:
-      - gateway
-    networks:
-      - gs-cloud-network
-    restart: always
-    healthcheck:
-      test: curl --fail -s http://localhost:9010/ || exit 1
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-
 # Adhoc PG
   pg-postgis-0:
     build: 

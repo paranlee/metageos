@@ -1,0 +1,84 @@
+version: '3.9'
+
+# volumes:
+    # geoserver-data:
+    # geo-db-data:
+
+networks:
+  gs-adhoc-network:
+    driver: bridge
+
+services:
+
+  # request shader
+  scg-wms-request-sharder:
+    image: scg-wms-request-sharder:latest
+    container_name: scg-wms-request-sharder
+    networks:
+      - gs-adhoc-network
+    ports:
+      - 9010:9010
+    restart: always
+    healthcheck:
+      test: curl --fail -s http://localhost:9091/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  geoserver-0:
+    image: kartoza/geoserver:2.19.2
+    depends_on:
+      - scg-wms-request-sharder
+    # volumes:
+    #   - geoserver-data:/opt/geoserver/data_dir
+    networks:
+      - gs-adhoc-network
+    ports:
+      - 8800:8080
+    environment:
+      - GEOSERVER_ADMIN_USER=admin
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+    restart: on-failure
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  geoserver-1:
+    image: kartoza/geoserver:2.19.2
+    depends_on:
+      - scg-wms-request-sharder
+    # volumes:
+    #   - geoserver-data:/opt/geoserver/data_dir
+    networks:
+      - gs-adhoc-network
+    ports:
+      - 8801:8080
+    environment:
+      - GEOSERVER_ADMIN_USER=admin
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+    restart: on-failure
+    healthcheck:
+      test: curl --fail -s http://localhost:8080/ || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  #  db:
+  #     image: kartoza/postgis:${POSTGIS_VERSION_TAG}
+  #     volumes:
+  #        - geo-db-data:/var/lib/postgresql
+  #     networks:
+  #       - gs-adhoc-network
+  #     ports:
+  #       - ${POSTGRES_PORT}:5432
+  #     environment:
+  #       - POSTGRES_DB=${POSTGRES_DB}
+  #       - POSTGRES_USER=${POSTGRES_USER}
+  #       - POSTGRES_PASS=${POSTGRES_PASS}
+  #       - ALLOW_IP_RANGE=${ALLOW_IP_RANGE}
+  #       - FORCE_SSL=TRUE
+  #     restart: on-failure
+  #     healthcheck:
+  #       test: "exit 0"

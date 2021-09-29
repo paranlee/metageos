@@ -108,7 +108,7 @@ class CustomerFilter implements GatewayFilter, Ordered {
 							.scheme(uri.getScheme())
 							.host(uri.getHost())
 							.port(uri.getPort())
-							.build(encoded).toUri();
+							.build(true).toUri();
 
 		exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, requestURI);
 
@@ -117,7 +117,7 @@ class CustomerFilter implements GatewayFilter, Ordered {
 
 	private URI getUriFromBBOX(String bbox) throws URISyntaxException {
 		System.out.println(String.format("bbox: %s", bbox));
-		String uri = "http://localhost:8000";
+		String uri = "http://172.18.234.37:8800";
 		if (!StringUtil.isNullOrEmpty(bbox)) {
 			String [] paramArr = bbox.split(",");
 			int minx = Double.valueOf(paramArr[0]).intValue();
@@ -125,8 +125,8 @@ class CustomerFilter implements GatewayFilter, Ordered {
 			int maxx = Double.valueOf(paramArr[2]).intValue();
 			int maxy = Double.valueOf(paramArr[3]).intValue();
 
-			if(minx < 14151299) {
-				uri = "http://localhost:8001";
+			if(minx > 200000) {
+				uri = "http://172.18.234.37:8801";
 			}
 		}
 

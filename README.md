@@ -85,6 +85,10 @@ scg nodes can utilize replication.
 - [Geoserver Cloud](http://geoserver.org/geoserver-cloud/)
   - [docker-compose.yml](https://geoserver.github.io/geoserver-cloud/deploy/docker-compose/stable/docker-compose.yml)
 
+- geoserver container package
+  - [kartoza/docker-geoserver](https://github.com/kartoza/docker-geoserver)
+  - [kartoza/docker-geoserver hub.docker](https://hub.docker.com/r/kartoza/geoserver)
+
 - CockroachDB
   - [cockroachlabs-field/docker-examples](https://github.com/cockroachlabs-field/docker-examples)
   - [local cluster with monitoring dashboard](https://www.cockroachlabs.com/docs/stable/start-a-local-cluster-in-docker-mac.html)
