@@ -320,9 +320,11 @@ services:
     privileged: true
     # volumes:
       # - ./postgresql/data-0:/var/lib/postgresql/data
-    restart: always
+    networks:
+      - gs-cloud-network
     ports:
       - 30000:5432
+    restart: always
 
   pg-postgis-1:
     build: 
@@ -333,9 +335,11 @@ services:
     privileged: true
     # volumes:
       # - ./postgresql/data-1:/var/lib/postgresql/data
-    restart: always
+    networks:
+      - gs-cloud-network
     ports:
       - 30001:5432
+    restart: always
 
 # cockroach DB example-haproxy
   crdb-0:
