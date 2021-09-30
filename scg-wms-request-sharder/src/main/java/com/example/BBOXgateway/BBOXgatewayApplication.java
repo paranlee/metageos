@@ -117,7 +117,7 @@ class CustomerFilter implements GatewayFilter, Ordered {
 
 	private URI getUriFromBBOX(String bbox) throws URISyntaxException {
 		System.out.println(String.format("bbox: %s", bbox));
-		String uri = "http://172.18.234.37:8800";
+		String uri = "http://geoserver-0:8080";
 		if (!StringUtil.isNullOrEmpty(bbox)) {
 			String [] paramArr = bbox.split(",");
 			int minx = Double.valueOf(paramArr[0]).intValue();
@@ -126,7 +126,7 @@ class CustomerFilter implements GatewayFilter, Ordered {
 			int maxy = Double.valueOf(paramArr[3]).intValue();
 
 			if(minx > 200000) {
-				uri = "http://172.18.234.37:8801";
+				uri = "http://geoserver-1:8080";
 			}
 		}
 
