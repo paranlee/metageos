@@ -14,53 +14,53 @@ services:
   scg-wms-request-sharder:
     image: scg-wms-request-sharder:latest
     container_name: scg-wms-request-sharder
+    hostname: scg-wms-request-sharder
+    depends_on:
+      - geoserver-0
+      - geoserver-1
     networks:
       - gs-adhoc-network
     ports:
       - 9010:9010
     restart: always
     healthcheck:
-      test: curl --fail -s http://localhost:9091/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
 
   geoserver-0:
     image: kartoza/geoserver:2.19.2
-    depends_on:
-      - scg-wms-request-sharder
+    container_name: geoserver-0
+    hostname: geoserver-0
     # volumes:
     #   - geoserver-data:/opt/geoserver/data_dir
     networks:
       - gs-adhoc-network
-    ports:
-      - 8800:8080
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
     restart: on-failure
     healthcheck:
-      test: curl --fail -s http://localhost:8080/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
 
   geoserver-1:
     image: kartoza/geoserver:2.19.2
-    depends_on:
-      - scg-wms-request-sharder
+    container_name: geoserver-1
+    hostname: geoserver-1
     # volumes:
     #   - geoserver-data:/opt/geoserver/data_dir
     networks:
       - gs-adhoc-network
-    ports:
-      - 8801:8080
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
     restart: on-failure
     healthcheck:
-      test: curl --fail -s http://localhost:8080/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
