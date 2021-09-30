@@ -24,7 +24,7 @@ services:
       - 9010:9010
     restart: always
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -33,16 +33,20 @@ services:
     image: kartoza/geoserver:2.19.2
     container_name: geoserver-0
     hostname: geoserver-0
-    # volumes:
-    #   - geoserver-data:/opt/geoserver/data_dir
+    volumes:
+      - ./geoserver-0:/opt/geoserver/data_dir
     networks:
       - gs-adhoc-network
+    ports:
+      - 8800:8080
     environment:
+      - TOMCAT_USER=tomcat
+      - TOMCAT_PASSWORD=tomcat
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
     restart: on-failure
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -51,16 +55,21 @@ services:
     image: kartoza/geoserver:2.19.2
     container_name: geoserver-1
     hostname: geoserver-1
-    # volumes:
-    #   - geoserver-data:/opt/geoserver/data_dir
+    volumes:
+      - ./geoserver-1:/opt/geoserver/data_dir
     networks:
       - gs-adhoc-network
+      - host
+    ports:
+      - 8801:8080
     environment:
+      - TOMCAT_USER=tomcat
+      - TOMCAT_PASSWORD=tomcat
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
     restart: on-failure
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
