@@ -1,2 +1,5 @@
 .osm.pbf
 tags
+
+pg-postgis-0
+pg-postgis-1

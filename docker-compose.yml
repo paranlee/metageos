@@ -285,7 +285,7 @@ services:
       - 9000:9000
     restart: always
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+      test: wget --no-verbose --tries=1 --spider http://localhost:9000/ || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -298,8 +298,8 @@ services:
     image: pg-postgis:latest
     container_name: pg-postgis-0
     privileged: true
-    # volumes:
-      # - ./postgresql/data-0:/var/lib/postgresql/data
+    volumes:
+      - ./pg-postgis-0:/var/lib/postgresql/data
     networks:
       - gs-cloud-network
     ports:
@@ -313,8 +313,8 @@ services:
     image: pg-postgis:latest
     container_name: pg-postgis-1
     privileged: true
-    # volumes:
-      # - ./postgresql/data-1:/var/lib/postgresql/data
+    volumes:
+      - ./pg-postgis-1:/var/lib/postgresql/data
     networks:
       - gs-cloud-network
     ports:
