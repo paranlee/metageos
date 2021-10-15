@@ -64,7 +64,7 @@ public class ExcelManager extends ExcelBase {
                 CellAddress startCell = getAddressStartCell(addrList[index]);
                 int rowIndex = startCell.getRow();
                 int colIndex = startCell.getColumn();
-                Object data = Iterables.getFirst(row.values(), null);
+                Object data = Iterables.getOnlyElement(row.values(), null);
                 if(data != null)
                 {
                     setData(rowIndex, colIndex, data.toString());
@@ -75,7 +75,7 @@ public class ExcelManager extends ExcelBase {
             System.out.println(ex.getMessage());
             throw ex;
         }
-        
+
     }
 
     /***
@@ -135,7 +135,7 @@ public class ExcelManager extends ExcelBase {
         }
         return ret;
     }
-    
+
     /***
      * 템플릿의 차트 스타일을 토대로 하여 차트 작성
      */
@@ -145,10 +145,10 @@ public class ExcelManager extends ExcelBase {
             XSSFChart templateChart = getChart(sheetName, chartName);
             if(templateChart != null) {
                 String[] addr = chartDataAddr.split("!"); // 시트이름!주소
-                
+
                 String chartDataSheetName = StringUtils.EMPTY;
                 String chartDatastartAddr = StringUtils.EMPTY;
-                
+
                 if (addr.length > 1) {
                     chartDataSheetName = addr[0];
                     chartDatastartAddr = addr[1];
@@ -166,7 +166,7 @@ public class ExcelManager extends ExcelBase {
             throw ex;
         }
     }
-    
+
     /***
      * DataTable로 차트 Series의 주소값 만들기
      */
@@ -175,20 +175,20 @@ public class ExcelManager extends ExcelBase {
         try {
             dic = new LinkedHashMap<Integer, CellRangeAddress>();
             CellAddress cellAddress = getAddressStartCell(startAddr);
-            
+
             int rowCount = dataList.size();
             int colCount = 0;
-            Map firstRow = Iterables.getFirst(dataList, null);
+            Map firstRow = Iterables.getOnlyElement(dataList, null);
             if(firstRow != null) {
-                colCount = firstRow.size();    
+                colCount = firstRow.size();
             }
-            
+
             for (int i = 0; i < colCount; i++) {
                 int fromRow = cellAddress.getRow();
                 int fromCol = cellAddress.getColumn() + i;
                 int toRow = cellAddress.getRow() + rowCount - 1;
                 int toCol = cellAddress.getColumn() + i;
-                
+
                 CellRangeAddress r = new CellRangeAddress(fromRow, toRow, fromCol, toCol);
                 dic.put(i, r);
             }
