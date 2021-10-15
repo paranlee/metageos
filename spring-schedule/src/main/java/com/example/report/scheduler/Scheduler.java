@@ -1,7 +1,9 @@
 package com.example.report.scheduler;
 
+import com.example.report.controller.ChatController;
 import com.example.report.mapper.JobMapper;
 import com.example.report.mapper.ReportMapper;
+import com.example.report.model.ChatMessage;
 import com.example.report.model.JobDto;
 import com.example.report.model.ReportDto;
 import com.example.report.service.JobService;
@@ -31,6 +33,9 @@ public class Scheduler {
     @Scheduled(cron = "* * * 1 * *")
     public void printDate() { // https://ryan-han.com/post/java/java-calendar-date/
         reportService.msg("I am Alive!");
+        /*ChatController test = new ChatController();
+        ChatMessage mm = new ChatMessage();
+        test.sendMessage(mm);*/
     }
 
     @Scheduled(cron = "3 * * * * *")
