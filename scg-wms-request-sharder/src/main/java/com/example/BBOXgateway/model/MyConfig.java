@@ -18,6 +18,7 @@ import java.util.List;
 public class MyConfig {
     private List<RouteElm> list;
 
+    @Setter
     @Getter
     public static class RouteElm {
         private String uri;
