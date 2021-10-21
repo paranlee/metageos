@@ -1,12 +1,11 @@
 package com.example.BBOXgateway;
 
+import com.example.BBOXgateway.model.MyConfig;
 import io.netty.util.internal.StringUtil;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.RouteToRequestUrlFilter;
@@ -15,7 +14,6 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -32,9 +30,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -93,100 +89,40 @@ public class BBOXgatewayApplication {
 @Service
 class CustomerFilter implements GatewayFilter, Ordered {
 
+	@Autowired
+	MyConfig myConfig;
+
+	CustomerFilter(MyConfig myConfig) {
+		this.myConfig = myConfig;
+	}
+
 	@Override
 	public int getOrder() {
 		return RouteToRequestUrlFilter.ROUTE_TO_URL_FILTER_ORDER + 1;
 	}
 
+	@SneakyThrows
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		ServerHttpRequest request = exchange.getRequest();
-		String bbox = request.getQueryParams().getFirst("BBOX");
 
-		URI uri = null;
-		try {
-			uri = getUriFromBBOX(bbox);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		URI uri = getUriFromBBOX(request);
 
-		boolean encoded = ServerWebExchangeUtils.containsEncodedParts(uri);
+		// boolean encoded = ServerWebExchangeUtils.containsEncodedParts(uri);
 		URI requestURI = UriComponentsBuilder.fromHttpRequest(request)
-							.scheme(uri.getScheme())
-							.host(uri.getHost())
-							.port(uri.getPort())
-							.build(true).toUri();
+				.scheme(uri.getScheme())
+				.host(uri.getHost())
+				.port(uri.getPort())
+				.build(true).toUri();
 
 		exchange.getAttributes().put(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, requestURI);
 
 		return chain.filter(exchange);
 	}
 
-	private URI getUriFromBBOX(String bbox) throws URISyntaxException {
-		System.out.println(String.format("bbox: %s", bbox));
-		String uri = "http://geoserver-0:8080";
-		if (!StringUtil.isNullOrEmpty(bbox)) {
-			String [] paramArr = bbox.split(",");
-			int minx = Double.valueOf(paramArr[0]).intValue();
-			int miny = Double.valueOf(paramArr[1]).intValue();
-			int maxx = Double.valueOf(paramArr[2]).intValue();
-			int maxy = Double.valueOf(paramArr[3]).intValue();
-
-			if(minx > 200000) {
-				uri = "http://geoserver-1:8080";
-			}
-		}
-
-		return new URI(uri);
-	}
-
-	@Configuration
-	@ConfigurationProperties("routes")
-	public static class MyConfig {
-		private static List<RouteElm> list;
-
-		public static List<RouteElm> getList() {
-			return list;
-		}
-	}
-
-	private class RouteElm {
-		private String uri;
-		private int minx, miny, maxx, maxy;
-
-		RouteElm(String uri,
-				 int minx, int miny,
-				 int maxx, int maxy) {
-			this.uri = uri;
-			this.minx = Integer.valueOf(minx);
-			this.miny = Integer.valueOf(miny);
-			this.maxx = Integer.valueOf(maxx);
-			this.maxy = Integer.valueOf(maxy);
-		}
-
-		public String getUri() {
-			return uri;
-		}
-
-		public int getMinx() {
-			return minx;
-		}
-
-		public int getMiny() {
-			return miny;
-		}
-
-		public int getMaxx() {
-			return maxx;
-		}
-
-		public int getMaxy() {
-			return maxy;
-		}
-	}
-
 	private URI getUriFromBBOX(ServerHttpRequest request) throws URISyntaxException {
-		List<RouteElm> list = MyConfig.getList();
+		URI ret = null;
+		List<MyConfig.RouteElm> list = myConfig.getList();
 		String uri = (list.get(0)).getUri();
 
 		String bbox = request.getQueryParams().getFirst("BBOX");
@@ -197,14 +133,16 @@ class CustomerFilter implements GatewayFilter, Ordered {
 			int maxx = Double.valueOf(paramArr[2]).intValue();
 			int maxy = Double.valueOf(paramArr[3]).intValue();
 
-			Optional<RouteElm> elm = list.stream().parallel()
+			Optional<MyConfig.RouteElm> elm = list.stream().parallel()
 					.filter(v -> v.getMinx() > minx && v.getMiny() >= miny
 							&& v.getMaxx() < maxx && v.getMaxy() < maxy
 					).findFirst();
 
+
 			uri = elm.get().getUri();
+			ret = new URI(uri);
 		}
 
-		return new URI(uri);
+		return ret;
 	}
 }
