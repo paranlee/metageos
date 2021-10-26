@@ -129,12 +129,24 @@ class CustomerFilter implements GatewayFilter, Ordered {
 			String [] paramArr = bbox.split(",");
 			int minx = Double.valueOf(paramArr[0]).intValue();
 			int miny = Double.valueOf(paramArr[1]).intValue();
+
 			int maxx = Double.valueOf(paramArr[2]).intValue();
 			int maxy = Double.valueOf(paramArr[3]).intValue();
 
+			int x = (minx + maxx) / 2;
+			int y = (miny + maxy) / 2;
+
+			/*for(MyConfig.RouteElm  v : list) {
+				if(minx >= v.getMinx() && miny >= v.getMiny()
+						&& maxx < v.getMaxx() && maxy < v.getMaxy()) {
+					uri = v.getUri();
+					break;
+				}
+			}*/
+
 			Optional<MyConfig.RouteElm> elm = list.stream().parallel()
-					.filter(v -> v.getMinx() >= minx && v.getMiny() >= miny
-							&& v.getMaxx() < maxx && v.getMaxy() < maxy
+					.filter(v -> x >= v.getMinx() && y >= v.getMiny()
+						&& x < v.getMaxx() && y < v.getMaxy()
 					).findFirst();
 
 			if(elm.isPresent()) {
