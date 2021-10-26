@@ -55,19 +55,19 @@ management.endpoints.web.exposure.include: '*'
 route:
   list:
     -
-      uri: geoserver-0
+      uri: http://geoserver-0:8080
       minx: 400000
       miny: 450000
       maxx: 800000
       maxy: 900000
     -
-      uri: geoserver-1
+      uri: http://geoserver-1:8080
       minx: 400000
       miny: 900000
       maxx: 800000
       maxy: 1350000
     -
-      uri: geoserver-2
+      uri: http://geoserver-2:8080
       minx: 800000
       miny: 450000
       maxx: 1200000
