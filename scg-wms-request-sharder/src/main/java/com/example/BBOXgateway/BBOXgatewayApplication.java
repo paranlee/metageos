@@ -121,7 +121,6 @@ class CustomerFilter implements GatewayFilter, Ordered {
 	}
 
 	private URI getUriFromBBOX(ServerHttpRequest request) throws URISyntaxException {
-		URI ret = null;
 		List<MyConfig.RouteElm> list = myConfig.getList();
 		String uri = (list.get(0)).getUri();
 
@@ -134,15 +133,15 @@ class CustomerFilter implements GatewayFilter, Ordered {
 			int maxy = Double.valueOf(paramArr[3]).intValue();
 
 			Optional<MyConfig.RouteElm> elm = list.stream().parallel()
-					.filter(v -> v.getMinx() > minx && v.getMiny() >= miny
+					.filter(v -> v.getMinx() >= minx && v.getMiny() >= miny
 							&& v.getMaxx() < maxx && v.getMaxy() < maxy
 					).findFirst();
 
-
-			uri = elm.get().getUri();
-			ret = new URI(uri);
+			if(elm.isPresent()) {
+				uri = elm.get().getUri();
+			}
 		}
 
-		return ret;
+		return new URI(uri);
 	}
 }
